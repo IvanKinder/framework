@@ -22,6 +22,7 @@ class Help:
 routes = {
     '/': Index(),
     '/help/': Help(),
+    '/help': Help(),
 }
 
 
@@ -52,7 +53,6 @@ class Framework:
         for front in self.front_list:
             front(request)
 
-        # print(request)
         code, body = view(request)
         start_response(code, [('Content-type', 'text/html')])
         return [body.encode('utf-8')]
