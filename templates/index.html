@@ -1,4 +1,15 @@
-<div id="container_demo" >
+{% extends 'base.html' %}
+{% block title %}
+    Мой сайт
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
+    <div id="container_demo" >
     <a class="hiddenanchor" id="tosubscribe"></a>
     <a class="hiddenanchor" id="tologin"></a>
 
@@ -34,3 +45,5 @@
             <a href="/contact_us/">Send us message</a>
         </div>
     </div>
+
+{% endblock %}

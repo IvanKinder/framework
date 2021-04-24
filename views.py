@@ -3,7 +3,7 @@ from templator import render
 
 class Index:
     def __call__(self, request):
-        return '200 OK', render('templates/index.html', data=request.get('data', None))
+        return '200 OK', render('index.html', data=request.get('data', None))
 
 
 class PageNotFound404:
@@ -18,4 +18,4 @@ class Help:
 
 class ContactUs:
     def __call__(self, request):
-        return '200 OK', render('templates/contact_us.html')
+        return '200 OK', render('contact_us.html')

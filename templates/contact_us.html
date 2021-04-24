@@ -1,9 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Contact us</title>
-</head>
+{% extends 'base.html' %}
+{% block title %}
+    Напишите нам
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
 <body>
     <div>
         <form  action="#" autocomplete="on" method="post">
@@ -30,3 +35,4 @@
     </div>
 </body>
 </html>
+{% endblock %}
