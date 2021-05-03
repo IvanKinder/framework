@@ -54,7 +54,32 @@ class Framework:
         return new_data
 
 
-application = Framework(routes, fronts)
+class DebugFramework(Framework):
+
+    def __init__(self, routes_obj, front_obj):
+        super().__init__(routes_obj, front_obj)
+        self.application = Framework(routes_obj, front_obj)
+
+    def __call__(self, env, start_response):
+        print('DEBUG')
+        print(env)
+        return self.application(env, start_response)
+
+
+class FakeFramework(Framework):
+
+    def __init__(self, routes_obj, front_obj):
+        super().__init__(routes_obj, front_obj)
+        self.application = Framework(routes_obj, front_obj)
+
+    def __call__(self, env, start_response):
+        start_response('200 OK', [('Content-Type', 'text/html')])
+        return [b'Hello from fake!']
+
+
+# application = Framework(routes, fronts)
+application = DebugFramework(routes, fronts)
+# application = FakeFramework(routes, fronts)
 
 
 
