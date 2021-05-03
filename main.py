@@ -1,39 +1,9 @@
 # from wsgiref.simple_server import make_server
-from random import randint
-
-from templator import render
-
-
-class Index:
-    def __call__(self, request):
-        return '200 OK', render('templates/index.html', data=request.get('data', None))
-
-
-class PageNotFound404:
-    def __call__(self, request):
-        return '404 BAD REQUEST', 'Page not found'
-
-
-class Help:
-    def __call__(self, request):
-        return '200 OK', 'some help text'
-
-
-routes = {
-    '/': Index(),
-    '/help/': Help(),
-}
-
-
-def some_front(request):
-    request['data'] = randint(0, 50)
-
-
-def other_front(request):
-    request['key'] = 'key'
-
-
-fronts = [some_front, other_front]
+import quopri
+from requests_handler import GetRequests, PostRequests
+from urls import fronts
+# from urls import routes, fronts
+from views import routes, PageNotFound404
 
 
 class Framework:
@@ -43,22 +13,73 @@ class Framework:
 
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
+
+        request = {}
+
+        method = environ['REQUEST_METHOD']
+        request['method'] = method
+
+        if method == 'GET':
+            request_params = GetRequests().get_request_params(environ)
+            request['request_params'] = request_params
+            print('Пришел get-запрос с параметрами: ', request_params)
+        if method == 'POST':
+            data = PostRequests().get_request_params(environ)
+            request['data'] = data
+            print('Пришел post-запрос: ', Framework.decode_value(data))
+            print('1111', request)
+
+        if path[-1] != '/':
+            path = path + '/'
         if path in self.routes_list:
             view = self.routes_list[path]
         else:
             view = PageNotFound404()
-        request = {}
 
+        # request = {}
         for front in self.front_list:
             front(request)
 
-        # print(request)
         code, body = view(request)
         start_response(code, [('Content-type', 'text/html')])
         return [body.encode('utf-8')]
 
+    @staticmethod
+    def decode_value(data: dict):
+        new_data = {}
+        for key, value in data.items():
+            val = bytes(value.replace('%', '=').replace('+', ' '), 'UTF-8')
+            val_decode_str = quopri.decodestring(val).decode('UTF-8')
+            new_data[key] = val_decode_str
+        return new_data
 
-application = Framework(routes, fronts)
+
+class DebugFramework(Framework):
+
+    def __init__(self, routes_obj, front_obj):
+        super().__init__(routes_obj, front_obj)
+        self.application = Framework(routes_obj, front_obj)
+
+    def __call__(self, env, start_response):
+        print('DEBUG')
+        print(env)
+        return self.application(env, start_response)
+
+
+class FakeFramework(Framework):
+
+    def __init__(self, routes_obj, front_obj):
+        super().__init__(routes_obj, front_obj)
+        self.application = Framework(routes_obj, front_obj)
+
+    def __call__(self, env, start_response):
+        start_response('200 OK', [('Content-Type', 'text/html')])
+        return [b'Hello from fake!']
+
+
+# application = Framework(routes, fronts)
+application = DebugFramework(routes, fronts)
+# application = FakeFramework(routes, fronts)
 
 
 

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    Категории
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
+    <a href="/">Назад</a>
+    <h1>Категории:</h1>
+    <ul>
+        {% for category in objects_list %}
+            <li><a href="/category/?id={{ id }}"> {{ category.name }} </a><span>Количество курсов: {{ category.course_count() }}</span></li>
+        {% endfor %}
+    </ul>
+    <div>
+        <li><a href="/courses_list/">Список курсов</a> </li>
+        <li><a href="/create_category/">Создать категорию</a> </li>
+        <li><a href="/create_course/">Создать курс</a> </li>
+    </div>
+{% endblock %}
