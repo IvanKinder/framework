@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+    Напишите нам
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
+<body>
+    <div>
+        <form  action="#" autocomplete="on" method="post">
+                <h1>Отправьте нам сообщение</h1>
+                <p>
+                    <label for="theme" class="theme">Тема сообщения</label>
+                    <input id="theme" name="theme_name" required="required" type="text" placeholder="Тема" />
+                </p>
+                <p>
+                    <label for="email" class="yourmail" data-icon="e" > Your email </label>
+                    <input id="email" name="email" required="required" type="text" placeholder="mysupermail@mail.com"/>
+                </p>
+                <p>
+                    <label for="text_msg" class="text_msg"> Введите Ваше сообщение </label>
+                    <input id="text_msg" name="text_msg" required="required" type="text" placeholder="Сообщение"/>
+                </p>
+                <p class="signin button">
+                    <input type="submit" value="Отправить"/>
+                </p>
+            </form>
+    </div>
+    <div>
+        <a href="/">Главная</a>
+    </div>
+</body>
+</html>
+{% endblock %}
