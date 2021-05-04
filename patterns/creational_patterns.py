@@ -4,7 +4,10 @@ from datetime import datetime
 
 
 class User:
-    pass
+    def __init__(self, firstname, lastname, email):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.email = email
 
 
 class Teacher(User):
@@ -12,7 +15,9 @@ class Teacher(User):
 
 
 class Student(User):
-    pass
+    def __init__(self, firstname, lastname, email, age):
+        super().__init__(firstname, lastname, email)
+        self.age = age
 
 
 class UserFactory:
