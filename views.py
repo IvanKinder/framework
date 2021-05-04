@@ -1,5 +1,6 @@
 from datetime import date
 
+from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, BaseSerializer, ListView, CreateView
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
 from templator import render
@@ -8,6 +9,8 @@ from templator import render
 site = Engine()
 logger = Logger('main')
 routes = {}
+email_notifier = EmailNotifier()
+sms_notifier = SmsNotifier()
 
 
 @AppRoute(routes=routes, url='/')
@@ -82,6 +85,7 @@ class CreateCourse:
                 course = site.create_course('record', name, category)
                 site.courses.append(course)
 
+
             return '200 OK', render('course_list.html', objects_list=category.courses, name=category.name, id=category.id)
 
         else:
@@ -148,3 +152,28 @@ class CopyCourse:
             return '200 OK', render('course_list.html', objects_list=site.courses)
         except KeyError:
             return '200 OK', render('course_list.html', objects_list=['Нет курсов'])
+
+
+@AppRoute(routes=routes, url='/students/')
+class StudentListView(ListView):
+    queryset = site.students
+    template_name = 'students.html'
+
+
+@AppRoute(routes=routes, url='/create_student/')
+class StudentCreateView(CreateView):
+    template_name = 'create_student.html'
+
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        new_obj = site.create_user('student', name)
+        site.students.append(new_obj)
+
+
+
+@AppRoute(routes=routes, url='/api/')
+class CategoryApi:
+    @Debug()
+    def __call__(self, request):
+        return '200 OK', BaseSerializer(site.categories).save()

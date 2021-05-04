@@ -1,5 +1,6 @@
 import copy
 import quopri
+from datetime import datetime
 
 
 class User:
@@ -143,3 +144,5 @@ class Logger(metaclass=SingletonByName):
     @staticmethod
     def log(text):
         print('log: ', text)
+        with open(f'{datetime.now()}.log', 'a', encoding='utf-8') as log_file:
+            log_file.write(f'{datetime.now()}:  {text}\n')
