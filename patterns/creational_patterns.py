@@ -7,7 +7,7 @@ class User:
     def __init__(self, username, student):
         self.username = username
         self.student = student
-        self.courses = []
+        self.courses = set()
 
 
 class Teacher(User):
@@ -115,6 +115,13 @@ class Engine:
             if category.name == name:
                 return category
         raise Exception(f'Нет категории с названием : {name}')
+
+    def find_course_by_name(self, name):
+        for course in self.courses:
+            # print('category', category.name)
+            if course.name == name:
+                return course
+        raise Exception(f'Нет курса с названием : {name}')
 
     @staticmethod
     def create_course(name, category):

@@ -184,6 +184,17 @@ class StudentAddToCourseView(ListView):
         return '200 OK', render('categories_list.html', name=student_name, courses_list=all_courses, objects_list=site.categories)
 
 
+@AppRoute(routes=routes, url='/added/')
+class StudentAddedToCourseView(ListView):
+    def __call__(self, request):
+        course_name = request['request_params']['course_name']
+        student_name = request['request_params']['student_name']
+        student = site.find_student_by_name(student_name)
+        course = site.find_course_by_name(course_name)
+        student.courses.add(course)
+        return '200 OK', render('add_to_course.html', name=student_name, course_name=course_name)
+
+
 @AppRoute(routes=routes, url='/create_student/')
 class StudentCreateView(CreateView):
 

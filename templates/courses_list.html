@@ -28,7 +28,7 @@
                 {#                {{ course.name }} <span><a href="/copy_course/?name={{ course.name }}">копировать</a> </span>#}
                 {% if student_name %}
                     {{ course.name }}
-                    <span><a href="/add_to_course/?course_name={{ course.name }}&student_name={{ student_name }}">записаться на этот курс</a> </span>
+                    <span><a href="/added/?course_name={{ course.name }}&student_name={{ student_name }}">записаться на этот курс</a> </span>
                 {% else %}
                     {{ course.name }}
                 {% endif %}

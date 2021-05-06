@@ -11,6 +11,7 @@
 {% block body %}
     <a href="/">Назад</a>
     <h1>Студент {{ name }}</h1>
+    <h2>Курсы студента:</h2>
     <ul>
         {% for course in courses_list %}
             <li>{{ course.name }}</li>
