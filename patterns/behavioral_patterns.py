@@ -36,7 +36,13 @@ class BaseSerializer:
         self.obj = obj
 
     def save(self):
-        return json.dumps(self.obj)
+        response = {}
+        for category in self.obj:
+            if category.name not in response.keys():
+                response[category.name] = []
+            for course in category.courses:
+                response[category.name].append(course.name)
+        return json.dumps(response)
 
     @staticmethod
     def load(data):

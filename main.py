@@ -44,6 +44,7 @@ class Framework:
 
         code, body = view(request)
         start_response(code, [('Content-type', 'text/html')])
+
         return [body.encode('utf-8')]
 
     @staticmethod

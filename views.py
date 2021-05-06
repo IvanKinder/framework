@@ -87,9 +87,6 @@ class CreateCourse:
             if self.category_name != '':
                 category = site.find_category_by_name(self.category_name)
 
-                # course = site.create_course('record', category_name, category)
-                # site.courses.append(course)
-                print(f'cat: {category.name}; course: {course_name}')
                 course = site.create_course(course_name, category)
                 site.courses.append(course)
 
@@ -111,7 +108,6 @@ class CreateCategory:
     @Debug()
     def __call__(self, request):
         if request['method'] == 'POST':
-            # print(request)
             data = request['data']
 
             name = data['name']
@@ -201,17 +197,16 @@ class StudentCreateView(CreateView):
     @Debug()
     def __call__(self, request):
         if request['method'] == 'POST':
-            print(request)
             data = request['data']
 
             name = data['name']
             name = site.decode_value(name)
 
-            student_id = data.get('student_id')
+            student_name = data.get('student_name')
 
             student = None
-            if student_id:
-                student = site.find_student_by_id(int(student_id))
+            if student_name:
+                student = site.find_student_by_name(student_name)
 
             new_student = site.create_student(name, student)
 
