@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    Студенты
+    Студент {{ name }}
 {% endblock %}
 {% block style %}
     {% include 'inc-style.html' %}
@@ -10,16 +10,16 @@
 {% endblock %}
 {% block body %}
     <a href="/">Назад</a>
-    <h1>Студенты:</h1>
+    <h1>Студент {{ name }}</h1>
     <ul>
-        {% for student in objects_list %}
-            <li><a href="/student_courses/?name={{ student.username }}">{{ student.username }}</a></li>
+        {% for course in courses_list %}
+            <li>{{ course.name }}</li>
         {% endfor %}
     </ul>
     <hr>
     <div>
-{#        <li><a href="/courses_list/">Список курсов</a> </li>#}
-        <li><a href="/create_student/">Создать студента</a> </li>
+        <li><a href="/add_to_course/?name={{ name }}">Записать на курс</a> </li>
+{#        <li><a href="/create_student/">Создать студента</a> </li>#}
 {#        <li><a href="/create_course/">Создать курс</a> </li>#}
     </div>
 {% endblock %}

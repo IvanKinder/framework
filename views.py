@@ -59,9 +59,14 @@ class CoursesList:
     @Debug()
     def __call__(self, request):
         logger.log('Список курсов')
+        student_name = ''
         try:
             category = site.find_category_by_name(request['request_params']['name'])
-            return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name, category=category)
+            try:
+                student_name = request['request_params']['student_name']
+            except:
+                pass
+            return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name, category=category, student_name=student_name)
         except KeyError:
             return '200 OK', render('courses_list.html', objects_list=['нет курсов'])
 
@@ -160,6 +165,23 @@ class CopyCourse:
 class StudentListView(ListView):
     queryset = site.students
     template_name = 'students_list.html'
+
+
+@AppRoute(routes=routes, url='/student_courses/')
+class StudentCoursesListView(ListView):
+    def __call__(self, request):
+        student_name = request['request_params']['name']
+        student = site.find_student_by_name(student_name)
+        return '200 OK', render('student_courses.html', name=student_name, courses_list=student.courses)
+
+
+@AppRoute(routes=routes, url='/add_to_course/')
+class StudentAddToCourseView(ListView):
+    def __call__(self, request):
+        all_courses = site.courses
+        student_name = request['request_params']['name']
+        # student = site.find_student_by_name(student_name)
+        return '200 OK', render('categories_list.html', name=student_name, courses_list=all_courses, objects_list=site.categories)
 
 
 @AppRoute(routes=routes, url='/create_student/')

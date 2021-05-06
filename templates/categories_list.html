@@ -10,10 +10,13 @@
 {% endblock %}
 {% block body %}
     <a href="/">Назад</a>
+    {% if name %}
+        <h1>{{ name }}</h1>
+    {% endif %}
     <h1>Категории:</h1>
     <ul>
         {% for category in objects_list %}
-            <li><a href="/courses_list/?name={{ category.name }}"> {{ category.name }} </a><span>Количество курсов: {{ category.course_count() }}</span></li>
+            <li><a href="/courses_list/?name={{ category.name }}&student_name={{ name }}"> {{ category.name }} </a><span>Количество курсов: {{ category.course_count() }}</span></li>
         {% endfor %}
     </ul>
     <hr>
