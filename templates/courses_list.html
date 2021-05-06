@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+    Курсы!
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
+    <div>
+        <a href="/">Назад на главную!</a>
+        <br>
+        {% if student_name %}
+            <h1>{{ student_name }}</h1>
+        {% endif %}
+        {% if name %}
+            <h1>{{ name }}</h1>
+        {% endif %}
+        <div>
+            <a href="/create_course/?category={{ name }}">Создать новый курс</a>
+        </div>
+        <br>
+        <h1>Список курсов категории {{ name }}</h1>
+        {% for course in objects_list %}
+            <li>
+                {#                {{ course.name }} <span><a href="/copy_course/?name={{ course.name }}">копировать</a> </span>#}
+                {% if student_name %}
+                    {{ course.name }}
+                    <span><a href="/added/?course_name={{ course.name }}&student_name={{ student_name }}">записаться на этот курс</a> </span>
+                {% else %}
+                    {{ course.name }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </div>
+{% endblock %}
