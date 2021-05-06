@@ -60,40 +60,42 @@ class CoursesList:
     def __call__(self, request):
         logger.log('Список курсов')
         try:
-            category = site.find_category_by_id(int(request['request_params']['id']))
-            return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name, id=category.id)
+            category = site.find_category_by_name(request['request_params']['name'])
+            return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name, category=category)
         except KeyError:
             return '200 OK', render('courses_list.html', objects_list=['нет курсов'])
 
 
 @AppRoute(routes=routes, url='/create_course/')
 class CreateCourse:
-    category_id = -1
+    category_name = ''
 
     @Debug()
     def __call__(self, request):
         if request['method'] == 'POST':
             data = request['data']
 
-            name = data['name']
-            name = site.decode_value(name)
+            course_name = data['name']
+            course_name = site.decode_value(course_name)
 
             category = None
-            if self.category_id != -1:
-                category = site.find_category_by_id(int(self.category_id))
+            if self.category_name != '':
+                category = site.find_category_by_name(self.category_name)
 
-                course = site.create_course('record', name, category)
+                # course = site.create_course('record', category_name, category)
+                # site.courses.append(course)
+                print(f'cat: {category.name}; course: {course_name}')
+                course = site.create_course(course_name, category)
                 site.courses.append(course)
 
-
-            return '200 OK', render('course_list.html', objects_list=category.courses, name=category.name, id=category.id)
+            return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name)
 
         else:
             try:
-                self.category_id = int(request['request_params']['id'])
-                category = site.find_category_by_id(int(self.category_id))
+                self.category_name = request['request_params']['category']
+                category = site.find_category_by_name(self.category_name)
 
-                return '200 OK', render('create_course.html', name=category.name, id=category.id)
+                return '200 OK', render('create_course.html', name=category.name)
             except KeyError:
                 return '200 OK', render('create_course.html', name='Нет категорий')
 
@@ -104,23 +106,23 @@ class CreateCategory:
     @Debug()
     def __call__(self, request):
         if request['method'] == 'POST':
-            print(request)
+            # print(request)
             data = request['data']
 
             name = data['name']
             name = site.decode_value(name)
 
-            category_id = data.get('category_id')
+            category_name = data.get('category_name')
 
             category = None
-            if category_id:
-                category = site.find_category_by_id(int(category_id))
+            if category_name:
+                category = site.find_category_by_name(category_name)
 
             new_category = site.create_category(name, category)
 
             site.categories.append(new_category)
 
-            return '200 OK', render('index.html', objects_list=site.categories)
+            return '200 OK', render('categories_list.html', objects_list=site.categories)
         else:
             categories = site.categories
             return '200 OK', render('create_category.html', categories=categories)
@@ -154,22 +156,38 @@ class CopyCourse:
             return '200 OK', render('course_list.html', objects_list=['Нет курсов'])
 
 
-@AppRoute(routes=routes, url='/students/')
+@AppRoute(routes=routes, url='/students_list/')
 class StudentListView(ListView):
     queryset = site.students
-    template_name = 'students.html'
+    template_name = 'students_list.html'
 
 
 @AppRoute(routes=routes, url='/create_student/')
 class StudentCreateView(CreateView):
-    template_name = 'create_student.html'
 
-    def create_obj(self, data: dict):
-        name = data['name']
-        name = site.decode_value(name)
-        new_obj = site.create_user('student', name)
-        site.students.append(new_obj)
+    @Debug()
+    def __call__(self, request):
+        if request['method'] == 'POST':
+            print(request)
+            data = request['data']
 
+            name = data['name']
+            name = site.decode_value(name)
+
+            student_id = data.get('student_id')
+
+            student = None
+            if student_id:
+                student = site.find_student_by_id(int(student_id))
+
+            new_student = site.create_student(name, student)
+
+            site.students.append(new_student)
+
+            return '200 OK', render('students_list.html', objects_list=site.students)
+        else:
+            students = site.students
+            return '200 OK', render('create_student.html', students=students)
 
 
 @AppRoute(routes=routes, url='/api/')

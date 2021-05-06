@@ -1,5 +1,7 @@
 # from wsgiref.simple_server import make_server
 import quopri
+
+from patterns.creational_patterns import Student
 from requests_handler import GetRequests, PostRequests
 from urls import fronts
 # from urls import routes, fronts
@@ -26,8 +28,8 @@ class Framework:
         if method == 'POST':
             data = PostRequests().get_request_params(environ)
             request['data'] = data
-            print('Пришел post-запрос: ', Framework.decode_value(data))
-            print('1111', request)
+            decoded_data = Framework.decode_value(data)
+            print('Пришел post-запрос: ', decoded_data)
 
         if path[-1] != '/':
             path = path + '/'
@@ -77,8 +79,8 @@ class FakeFramework(Framework):
         return [b'Hello from fake!']
 
 
-# application = Framework(routes, fronts)
-application = DebugFramework(routes, fronts)
+application = Framework(routes, fronts)
+# application = DebugFramework(routes, fronts)
 # application = FakeFramework(routes, fronts)
 
 

@@ -15,10 +15,10 @@
         <br>
         <br>
         <div>
-            <a href="/create_course/">Создать новый курс</a>
+            <a href="/create_course/?category={{ name }}">Создать новый курс</a>
         </div>
         <br>
-        <h1>Список курсов</h1>
+        <h1>Список курсов категории {{ name }}</h1>
         {% for course in objects_list %}
         <li>
             {{ course.name }} <span><a href="/copy_course/?name={{ course.name }}">копировать</a> </span>

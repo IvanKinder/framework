@@ -9,15 +9,19 @@
     {% include 'inc-menu.html' %}
 {% endblock %}
 {% block body %}
+    <div>
+        <a href="/students_list/">Назад</a>
+    </div>
+
     <br>
     <br>
     <br>
 
     <div>
-        <h1>Создание студента</h1>
+        <h1>Создание студента: </h1>
         <form method="post">
-            <input type="text" name="name" placeholder="Имя">
-            <button type="submit">Сохранить</button>
+            <input type="text" name="name" placeholder="Имя студента">
+            <button type="submit">Сохранить и вернуться к списку студентов</button>
         </form>
     </div>
 {% endblock %}

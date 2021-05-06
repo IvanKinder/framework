@@ -4,10 +4,10 @@ from datetime import datetime
 
 
 class User:
-    def __init__(self, firstname, lastname, email):
-        self.firstname = firstname
-        self.lastname = lastname
-        self.email = email
+    def __init__(self, username, student):
+        self.username = username
+        self.student = student
+        self.courses = []
 
 
 class Teacher(User):
@@ -15,9 +15,7 @@ class Teacher(User):
 
 
 class Student(User):
-    def __init__(self, firstname, lastname, email, age):
-        super().__init__(firstname, lastname, email)
-        self.age = age
+    pass
 
 
 class UserFactory:
@@ -70,16 +68,19 @@ class Category:
         return result
 
 
-class CourseFactory:
-    types = {
-        'interactive': InteractiveCourse,
-        'recorded': RecordedCourse
-    }
+# class CourseFactory:
+#     @classmethod
+#     def create(cls, name, category):
+#         return cls(name, category)
+    # types = {
+    #     'interactive': InteractiveCourse,
+    #     'recorded': RecordedCourse
+    # }
 
     # Фабричный метод
-    @classmethod
-    def create(cls, type_, name, category):
-        return cls.types[type_](name, category)
+    # @classmethod
+    # def create(cls, type_, name, category):
+    #     return cls.types[type_](name, category)
 
 
 class Engine:
@@ -94,19 +95,31 @@ class Engine:
         return UserFactory.create(type_)
 
     @staticmethod
+    def create_student(name, student=None):
+        return Student(name, student)
+
+    def find_student_by_id(self, id):
+        for student in self.students:
+            print('student', student.id)
+            if student.id == id:
+                return student
+        raise Exception(f'Нет студента с id = : {id}')
+
+    @staticmethod
     def create_category(name, category=None):
         return Category(name, category)
 
-    def find_category_by_id(self, id):
+    def find_category_by_name(self, name):
         for category in self.categories:
-            print('category', category.id)
-            if category.id == id:
+            # print('category', category.name)
+            if category.name == name:
                 return category
-        raise Exception(f'Нет категории с id = : {id}')
+        raise Exception(f'Нет категории с названием : {name}')
 
     @staticmethod
-    def create_course(type_, name, category):
-        return CourseFactory.create(type_, name, category)
+    def create_course(name, category):
+        # return CourseFactory.create(type_, name, category)
+        return Course(name, category)
 
     def get_course(self, name):
         for course in self.courses:
@@ -149,5 +162,5 @@ class Logger(metaclass=SingletonByName):
     @staticmethod
     def log(text):
         print('log: ', text)
-        with open(f'{datetime.now()}.log', 'a', encoding='utf-8') as log_file:
-            log_file.write(f'{datetime.now()}:  {text}\n')
+        # with open(f'{datetime.now()}.log', 'a', encoding='utf-8') as log_file:
+        #     log_file.write(f'{datetime.now()}:  {text}\n')

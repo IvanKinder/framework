@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    Категории
+    Студенты
 {% endblock %}
 {% block style %}
     {% include 'inc-style.html' %}
@@ -10,16 +10,16 @@
 {% endblock %}
 {% block body %}
     <a href="/">Назад</a>
-    <h1>Категории:</h1>
+    <h1>Студенты:</h1>
     <ul>
-        {% for category in objects_list %}
-            <li><a href="/courses_list/?name={{ category.name }}"> {{ category.name }} </a><span>Количество курсов: {{ category.course_count() }}</span></li>
+        {% for student in objects_list %}
+            <li>{{ student.username }}</li>
         {% endfor %}
     </ul>
     <hr>
     <div>
 {#        <li><a href="/courses_list/">Список курсов</a> </li>#}
-        <li><a href="/create_category/">Создать категорию</a> </li>
+        <li><a href="/create_student/">Создать студента</a> </li>
 {#        <li><a href="/create_course/">Создать курс</a> </li>#}
     </div>
 {% endblock %}
