@@ -121,9 +121,9 @@ class Engine:
         raise Exception(f'Нет курса с названием : {name}')
 
     @staticmethod
-    def create_course(name, category):
+    def create_course(name):
         # return CourseFactory.create(type_, name, category)
-        return Course(name, category)
+        return Course(name)
 
     def get_course(self, name):
         for course in self.courses:

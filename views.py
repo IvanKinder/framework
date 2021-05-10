@@ -74,7 +74,7 @@ class CoursesList:
                 student_name = request['request_params']['student_name']
             except:
                 pass
-            return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name, category=category, student_name=student_name)
+            return '200 OK', render('courses_list.html', objects_list=category_mapper.courses(category), name=category.name, category=category, student_name=student_name)
         except KeyError:
             return '200 OK', render('courses_list.html', objects_list=['нет курсов'])
 
@@ -95,11 +95,11 @@ class CreateCourse:
             if self.category_name != '':
                 category = site.find_category_by_name(self.category_name)
 
-                course = site.create_course(course_name, category)
+                course = site.create_course(course_name)
                 course_mapper.insert(course, category)
                 site.courses.append(course)
 
-            return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name)
+            return '200 OK', render('courses_list.html', objects_list=category_mapper.courses(category), name=category.name)
 
         else:
             try:

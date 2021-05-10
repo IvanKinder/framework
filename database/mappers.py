@@ -102,9 +102,17 @@ class CategoryMapper:
             raise Exception(e.args)
 
     def course_count(self, category_name):
-        statement = f"SELECT count(category) FROM {self.category_course} where category = {category_name}"
+        statement = f"SELECT count(category) FROM {self.category_course} where category = {str(category_name)}"
         my_count = self.cursor.execute(statement)
-        return my_count
+        return my_count.fetchone()[0]
+
+    def courses(self, obj):
+        statement = f"select course from {self.category_course} where category = {obj.name}"
+        result = self.cursor.execute(statement)
+        tmp_list = []
+        for course in result.fetchall():
+            tmp_list.append(course[0])
+        return tmp_list
 
 
 class CourseMapper:
