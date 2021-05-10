@@ -1,12 +1,10 @@
 import copy
 import quopri
-from datetime import datetime
 
 
 class User:
-    def __init__(self, username, student):
+    def __init__(self, username):
         self.username = username
-        self.student = student
         self.courses = set()
 
 
@@ -39,10 +37,10 @@ class CoursePrototype:
 
 class Course(CoursePrototype):
 
-    def __init__(self, name, category):
+    def __init__(self, name):
         self.name = name
-        self.category = category
-        self.category.courses.append(self)
+        # self.category = category
+        # self.category.courses.append(self)
 
 
 class InteractiveCourse(Course):
@@ -54,18 +52,17 @@ class RecordedCourse(Course):
 
 
 class Category:
-    auto_id = 0
 
-    def __init__(self, name, category):
+    def __init__(self, name):
         self.name = name
-        self.category = category
         self.courses = []
 
-    def course_count(self):
-        result = len(self.courses)
-        if self.category:
-            result += self.category.course_count()
-        return result
+    # def course_count(self):
+        # result = len(self.courses)
+        # if self.category:
+        #     result += self.category.course_count()
+        # result = 0
+        # return result
 
 
 # class CourseFactory:
@@ -95,8 +92,8 @@ class Engine:
         return UserFactory.create(type_)
 
     @staticmethod
-    def create_student(name, student=None):
-        return Student(name, student)
+    def create_student(name):
+        return Student(name)
 
     def find_student_by_name(self, name):
         for student in self.students:
@@ -106,8 +103,8 @@ class Engine:
         raise Exception(f'Нет студента с именем = : {name}')
 
     @staticmethod
-    def create_category(name, category=None):
-        return Category(name, category)
+    def create_category(name):
+        return Category(name)
 
     def find_category_by_name(self, name):
         for category in self.categories:

@@ -1,12 +1,20 @@
+import sqlite3
 from datetime import date
 
+from database.mappers import StudentMapper, CategoryMapper, CourseMapper
 from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, BaseSerializer, ListView, CreateView
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
 from templator import render
 
-
+connection = sqlite3.connect('database/db.sqlite')
 site = Engine()
+student_mapper = StudentMapper(connection)
+category_mapper = CategoryMapper(connection)
+course_mapper = CourseMapper(connection)
+site.students = student_mapper.all()
+site.categories = category_mapper.all()
+site.courses = course_mapper.all()
 logger = Logger('main')
 routes = {}
 email_notifier = EmailNotifier()
@@ -88,6 +96,7 @@ class CreateCourse:
                 category = site.find_category_by_name(self.category_name)
 
                 course = site.create_course(course_name, category)
+                course_mapper.insert(course, category)
                 site.courses.append(course)
 
             return '200 OK', render('courses_list.html', objects_list=category.courses, name=category.name)
@@ -115,15 +124,18 @@ class CreateCategory:
 
             category_name = data.get('category_name')
 
-            category = None
-            if category_name:
-                category = site.find_category_by_name(category_name)
+            # category = None
+            # if category_name:
+            #     category = site.find_category_by_name(category_name)
 
-            new_category = site.create_category(name, category)
+            new_category = site.create_category(name)
+            try:
+                category_mapper.insert(new_category)
+                site.categories.append(new_category)
 
-            site.categories.append(new_category)
-
-            return '200 OK', render('categories_list.html', objects_list=site.categories)
+                return '200 OK', render('categories_list.html', objects_list=site.categories)
+            except Exception:
+                return '404 BAD_REQUEST', render('bad.html')
         else:
             categories = site.categories
             return '200 OK', render('create_category.html', categories=categories)
@@ -134,7 +146,7 @@ class CategoryList:
     @Debug()
     def __call__(self, request):
         logger.log('Список категорий')
-        return '200 OK', render('categories_list.html', objects_list=site.categories)
+        return '200 OK', render('categories_list.html', objects_list=site.categories, category_mapper=category_mapper)
 
 
 @AppRoute(routes=routes, url='/copy_course/')
@@ -204,12 +216,12 @@ class StudentCreateView(CreateView):
 
             student_name = data.get('student_name')
 
-            student = None
-            if student_name:
-                student = site.find_student_by_name(student_name)
+            # student = None
+            # if student_name:
+            #     student = site.find_student_by_name(student_name)
 
-            new_student = site.create_student(name, student)
-
+            new_student = site.create_student(name)
+            student_mapper.insert(new_student)
             site.students.append(new_student)
 
             return '200 OK', render('students_list.html', objects_list=site.students)
