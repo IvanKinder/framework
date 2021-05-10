@@ -11,6 +11,7 @@ class StudentMapper:
         self.connection = connection
         self.cursor = connection.cursor()
         self.tablename = 'students'
+        self.student_course = 'student_course'
 
     def all(self):
         statement = f'SELECT * from {self.tablename}'
@@ -39,6 +40,22 @@ class StudentMapper:
             self.connection.commit()
         except Exception as e:
             raise Exception(e.args)
+
+    def courses(self, obj):
+        statement = f"select course from {self.student_course} where student = '{str(obj.username)}'"
+        result = self.cursor.execute(statement)
+        tmp_list = []
+        for course in result.fetchall():
+            tmp_list.append(course[0])
+        return tmp_list
+
+    def add_to_course(self, obj, course):
+        try:
+            statement = f"insert into {self.student_course} (student, course) values (?, ?)"
+            self.cursor.execute(statement, (obj.username, course))
+            self.connection.commit()
+        except:
+            pass
 
     # def update(self, obj):
     #     statement = f"UPDATE {self.tablename} SET name=? WHERE id=?"

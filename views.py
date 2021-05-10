@@ -180,7 +180,7 @@ class StudentCoursesListView(ListView):
     def __call__(self, request):
         student_name = request['request_params']['name']
         student = site.find_student_by_name(student_name)
-        return '200 OK', render('student_courses.html', name=student_name, courses_list=student.courses)
+        return '200 OK', render('student_courses.html', name=student_name, courses_list=student_mapper.courses(student))
 
 
 @AppRoute(routes=routes, url='/add_to_course/')
@@ -189,7 +189,7 @@ class StudentAddToCourseView(ListView):
         all_courses = site.courses
         student_name = request['request_params']['name']
         # student = site.find_student_by_name(student_name)
-        return '200 OK', render('categories_list.html', name=student_name, courses_list=all_courses, objects_list=site.categories)
+        return '200 OK', render('categories_list.html', name=student_name, courses_list=all_courses, objects_list=site.categories, category_mapper=category_mapper)
 
 
 @AppRoute(routes=routes, url='/added/')
@@ -199,6 +199,7 @@ class StudentAddedToCourseView(ListView):
         student_name = request['request_params']['student_name']
         student = site.find_student_by_name(student_name)
         course = site.find_course_by_name(course_name)
+        student_mapper.add_to_course(student, course_name)
         student.courses.add(course)
         return '200 OK', render('add_to_course.html', name=student_name, course_name=course_name)
 
