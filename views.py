@@ -1,7 +1,8 @@
 import sqlite3
 from datetime import date
 
-from database.mappers import StudentMapper, CategoryMapper, CourseMapper
+from database.mappers import StudentMapper, CategoryMapper, CourseMapper, MapperRegistry
+# from database.unit_of_work import UnitOfWork
 from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, BaseSerializer, ListView, CreateView
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
@@ -19,6 +20,8 @@ logger = Logger('main')
 routes = {}
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
+# UnitOfWork.new_current()
+# UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
 
 
 @AppRoute(routes=routes, url='/')

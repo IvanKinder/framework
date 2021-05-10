@@ -75,22 +75,6 @@ class StudentMapper:
     #         raise Exception(e.args)
 
 
-# class MapperRegistry:
-#     mappers = {
-#         'student': StudentMapper,
-#         #'category': CategoryMapper
-#     }
-#
-#     @staticmethod
-#     def get_student_mapper(obj):
-#         if isinstance(obj, Student):
-#             return StudentMapper(connection)
-#
-#     @staticmethod
-#     def get_current_mapper(name):
-#         return MapperRegistry.mappers[name](connection)
-
-
 class CategoryMapper:
 
     def __init__(self, connection):
@@ -163,3 +147,20 @@ class CourseMapper:
             self.connection.commit()
         except Exception as e:
             raise Exception(e.args)
+
+
+class MapperRegistry:
+    mappers = {
+        'student': StudentMapper,
+        'category': CategoryMapper,
+        'course': CourseMapper
+    }
+
+    @staticmethod
+    def get_student_mapper(obj):
+        if isinstance(obj, Student):
+            return StudentMapper(connection)
+
+    @staticmethod
+    def get_current_mapper(name):
+        return MapperRegistry.mappers[name](connection)
