@@ -111,20 +111,23 @@ class CategoryMapper:
         return result
 
     def insert(self, obj):
-        statement = f"INSERT INTO {self.tablename} (name) VALUES (?)"
         try:
+            statement = f"INSERT INTO {self.tablename} (name) VALUES (?)"
             self.cursor.execute(statement, (obj.name,))
             self.connection.commit()
         except Exception as e:
             raise Exception(e.args)
 
     def course_count(self, category_name):
-        statement = f"SELECT count(category) FROM {self.category_course} where category = {str(category_name)}"
-        my_count = self.cursor.execute(statement)
-        return my_count.fetchone()[0]
+        try:
+            statement = f"SELECT count(category) FROM {self.category_course} where category = '{str(category_name)}'"
+            my_count = self.cursor.execute(statement)
+            return my_count.fetchone()[0]
+        except:
+            return 0
 
     def courses(self, obj):
-        statement = f"select course from {self.category_course} where category = {obj.name}"
+        statement = f"select course from {self.category_course} where category = '{obj.name}'"
         result = self.cursor.execute(statement)
         tmp_list = []
         for course in result.fetchall():

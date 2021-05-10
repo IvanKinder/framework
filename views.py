@@ -132,9 +132,9 @@ class CreateCategory:
             try:
                 category_mapper.insert(new_category)
                 site.categories.append(new_category)
-
-                return '200 OK', render('categories_list.html', objects_list=site.categories)
-            except Exception:
+                return '200 OK', render('categories_list.html', objects_list=site.categories, category_mapper=category_mapper)
+            except Exception as e:
+                print(e)
                 return '404 BAD_REQUEST', render('bad.html')
         else:
             categories = site.categories
