@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+    Создать студента
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
+    <div>
+        <a href="/students_list/">Назад</a>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <div>
+        <h1>Создание студента: </h1>
+        <form method="post">
+            <input type="text" name="name" placeholder="Имя студента">
+            <button type="submit">Сохранить и вернуться к списку студентов</button>
+        </form>
+    </div>
+{% endblock %}
