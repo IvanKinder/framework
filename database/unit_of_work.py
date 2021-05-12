@@ -6,11 +6,11 @@ class UnitOfWork:
 
     def __init__(self):
         self.new_objects = []
-        self.dirty_objects = []
-        self.removed_objects = []
+        # self.dirty_objects = []
+        # self.removed_objects = []
 
-    def set_mapper_registry(self, MapperRegistry):
-        self.MapperRegistry = MapperRegistry
+    def set_mapper(self, mapper):
+        self.mapper = mapper
 
     def register_new(self, obj):
         self.new_objects.clear()
@@ -26,13 +26,14 @@ class UnitOfWork:
 
     def commit(self):
         self.insert_new()
-        self.update_dirty()
-        self.delete_removed()
+        # self.update_dirty()
+        # self.delete_removed()
 
     def insert_new(self):
         print(self.new_objects)
         for obj in self.new_objects:
-            self.MapperRegistry.get_mapper(obj).insert(obj)
+            self.mapper.insert(obj)
+
 
     # def update_dirty(self):
     #     for obj in self.dirty_objects:
@@ -60,10 +61,10 @@ class DomainObject:
     def mark_new(self):
         UnitOfWork.get_current().register_new(self)
 
-    def mark_dirty(self):
-        UnitOfWork.get_current().register_dirty(self)
-
-    def mark_removed(self):
-        UnitOfWork.get_current().register_removed(self)
+    # def mark_dirty(self):
+    #     UnitOfWork.get_current().register_dirty(self)
+    #
+    # def mark_removed(self):
+    #     UnitOfWork.get_current().register_removed(self)
 
 

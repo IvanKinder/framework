@@ -1,6 +1,8 @@
 import copy
 import quopri
 
+from database.unit_of_work import DomainObject
+
 
 class User:
     def __init__(self, username):
@@ -12,7 +14,7 @@ class Teacher(User):
     pass
 
 
-class Student(User):
+class Student(User, DomainObject):
     pass
 
 

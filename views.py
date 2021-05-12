@@ -2,7 +2,7 @@ import sqlite3
 from datetime import date
 
 from database.mappers import StudentMapper, CategoryMapper, CourseMapper, MapperRegistry
-# from database.unit_of_work import UnitOfWork
+from database.unit_of_work import UnitOfWork
 from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, BaseSerializer, ListView, CreateView
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
@@ -20,7 +20,7 @@ logger = Logger('main')
 routes = {}
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
-# UnitOfWork.new_current()
+UnitOfWork.new_current()
 # UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
 
 
@@ -225,7 +225,10 @@ class StudentCreateView(CreateView):
             #     student = site.find_student_by_name(student_name)
 
             new_student = site.create_student(name)
-            student_mapper.insert(new_student)
+            # student_mapper.insert(new_student)
+            new_student.mark_new()
+            UnitOfWork.get_current().set_mapper(student_mapper)
+            UnitOfWork.get_current().commit()
             site.students.append(new_student)
 
             return '200 OK', render('students_list.html', objects_list=site.students)
