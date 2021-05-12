@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+    Студент {{ name }}
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
+    <a href="/">Назад</a>
+    <h1>Студент {{ name }}</h1>
+    <h2>Курсы студента:</h2>
+    <ul>
+        {% for course in courses_list %}
+            <li>{{ course }}</li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <div>
+        <li><a href="/add_to_course/?name={{ name }}">Записать на курс</a> </li>
+{#        <li><a href="/create_student/">Создать студента</a> </li>#}
+{#        <li><a href="/create_course/">Создать курс</a> </li>#}
+    </div>
+{% endblock %}
