@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import date
 
-from database.mappers import StudentMapper, CategoryMapper, CourseMapper, MapperRegistry
+from database.mappers import StudentMapper, CategoryMapper, CourseMapper
 from database.unit_of_work import UnitOfWork
 from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, BaseSerializer, ListView, CreateView
 from patterns.creational_patterns import Engine, Logger
