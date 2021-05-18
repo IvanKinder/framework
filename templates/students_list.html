@@ -13,7 +13,7 @@
     <h1>Студенты:</h1>
     <ul>
         {% for student in objects_list %}
-            <li><a href="/student_courses/?name={{ student.username }}">{{ student.username }}</a></li>
+            <li><a href="/student_courses/?id={{ student.id }}&name={{ student.username }}">{{ student.username }}</a></li>
         {% endfor %}
     </ul>
     <hr>

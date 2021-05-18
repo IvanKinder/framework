@@ -71,13 +71,15 @@ class CoursesList:
     def __call__(self, request):
         logger.log('Список курсов')
         student_name = ''
+        student_id = None
         try:
             category = site.find_category_by_name(request['request_params']['name'])
             try:
-                student_name = request['request_params']['student_name']
+                # student_name = request['request_params']['student_name']
+                student_id = request['request_params']['student_id']
             except:
                 pass
-            return '200 OK', render('courses_list.html', objects_list=category_mapper.courses(category), name=category.name, category=category, student_name=student_name)
+            return '200 OK', render('courses_list.html', objects_list=category_mapper.courses(category), name=category.name, category=category, student_name=student_name, student_id=student_id)
         except KeyError:
             return '200 OK', render('courses_list.html', objects_list=['нет курсов'])
 
@@ -181,30 +183,36 @@ class StudentListView(ListView):
 @AppRoute(routes=routes, url='/student_courses/')
 class StudentCoursesListView(ListView):
     def __call__(self, request):
-        student_name = request['request_params']['name']
-        student = site.find_student_by_name(student_name)
-        return '200 OK', render('student_courses.html', name=student_name, courses_list=student_mapper.courses(student))
+        # student_name = request['request_params']['name']
+        student_id = request['request_params']['id']
+        # print(student_name.encode('utf-8').decode('utf-8'))
+        student = site.find_student_by_id(student_id)
+        student_name = student.username
+        return '200 OK', render('student_courses.html', name=student_name, courses_list=student_mapper.courses(student), student_id=student.id)
 
 
 @AppRoute(routes=routes, url='/add_to_course/')
 class StudentAddToCourseView(ListView):
     def __call__(self, request):
         all_courses = site.courses
-        student_name = request['request_params']['name']
+        student_id = request['request_params']['student_id']
+        student = site.find_student_by_id(student_id)
+        student_name = student.username
+        # student_name = request['request_params']['name']
         # student = site.find_student_by_name(student_name)
-        return '200 OK', render('categories_list.html', name=student_name, courses_list=all_courses, objects_list=site.categories, category_mapper=category_mapper)
+        return '200 OK', render('categories_list.html', name=student_name, courses_list=all_courses, objects_list=site.categories, category_mapper=category_mapper, student=student)
 
 
 @AppRoute(routes=routes, url='/added/')
 class StudentAddedToCourseView(ListView):
     def __call__(self, request):
         course_name = request['request_params']['course_name']
-        student_name = request['request_params']['student_name']
-        student = site.find_student_by_name(student_name)
+        student_id = request['request_params']['student_id']
+        student = site.find_student_by_id(student_id)
         course = site.find_course_by_name(course_name)
         student_mapper.add_to_course(student, course_name)
         student.courses.add(course)
-        return '200 OK', render('add_to_course.html', name=student_name, course_name=course_name)
+        return '200 OK', render('add_to_course.html', name=student.username, course_name=course_name)
 
 
 @AppRoute(routes=routes, url='/create_student/')

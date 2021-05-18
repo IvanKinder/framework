@@ -99,10 +99,17 @@ class Engine:
 
     def find_student_by_name(self, name):
         for student in self.students:
-            # print('student', student.name)
+            # print('student', student.username)
             if student.username == name:
                 return student
         raise Exception(f'Нет студента с именем = : {name}')
+
+    def find_student_by_id(self, id):
+        for student in self.students:
+            # print('student', student.username)
+            if student.id == int(id):
+                return student
+        raise Exception(f'Нет студента с id = : {id}')
 
     @staticmethod
     def create_category(name):

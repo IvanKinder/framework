@@ -26,9 +26,9 @@
         {% for course in objects_list %}
             <li>
                 {#                {{ course.name }} <span><a href="/copy_course/?name={{ course.name }}">копировать</a> </span>#}
-                {% if student_name %}
+                {% if student_id %}
                     {{ course }}
-                    <span><a href="/added/?course_name={{ course }}&student_name={{ student_name }}">записаться на этот курс</a> </span>
+                    <span><a href="/added/?course_name={{ course }}&student_id={{ student_id }}">записаться на этот курс</a> </span>
                 {% else %}
                     {{ course }}
                 {% endif %}
