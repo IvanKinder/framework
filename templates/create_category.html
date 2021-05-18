@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+    Создать категорию
+{% endblock %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock %}
+{% block body %}
+    <div>
+        <a href="/category_list/">Назад</a>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <div>
+        <h1>Создание категории: </h1>
+        <form method="post">
+            <input type="text" name="name" placeholder="Название категории">
+            <button type="submit">Сохранить и вернуться к списку категорий</button>
+        </form>
+    </div>
+{% endblock %}
